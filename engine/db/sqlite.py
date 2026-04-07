@@ -1082,7 +1082,7 @@ class SQLiteRepository:
         title: str,
         summary: str,
         tags: list[str] | None = None,
-        source_site: str = "berry-doctor",
+        source_site: str = "open-smartfarm-doctor",
         shared: bool = True,
         payload: dict[str, Any] | None = None,
         dedupe_window_seconds: int | None = None,

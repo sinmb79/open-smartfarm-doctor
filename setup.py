@@ -9,6 +9,7 @@ ROOT = Path(__file__).parent
 
 
 def pyinstaller_args() -> list[str]:
+    icon_path = ROOT / "assets" / "open-smartfarm-doctor.ico"
     args = [
         "--onefile",
         "--windowed",
@@ -21,6 +22,8 @@ def pyinstaller_args() -> list[str]:
         "--add-data",
         "i18n;i18n",
     ]
+    if icon_path.exists():
+        args.extend(["--icon", str(icon_path)])
     mosquitto_binary = ROOT / "bin" / "mosquitto" / "mosquitto.exe"
     if mosquitto_binary.exists():
         args.extend(["--add-binary", "bin\\mosquitto\\mosquitto.exe;bin\\mosquitto"])
@@ -30,7 +33,7 @@ def pyinstaller_args() -> list[str]:
 setup(
     name="open-smartfarm-doctor",
     version="0.1.0",
-    description="Public multicrop smartfarm assistant program derived from BerryDoctor",
+    description="Public multicrop smartfarm assistant program for open greenhouse operations",
     long_description=(ROOT / "README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=("tests", "firmware", "docs")),

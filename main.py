@@ -50,7 +50,7 @@ def _prevent_sleep() -> None:
 
 
 @dataclass
-class BerryDoctorApplication:
+class OpenSmartFarmDoctorApplication:
     repository: SQLiteRepository
     translator: Translator
     config_manager: ConfigManager
@@ -176,7 +176,7 @@ class BerryDoctorApplication:
                 title="초기 운영 체크리스트",
                 summary="환기, 배수구, 안전출하일, 수확 기록 루틴을 먼저 고정하세요.",
                 tags=["phase4", "operations"],
-                source_site="BerryDoctor Project",
+                source_site="Open SmartFarm Doctor",
                 payload={"type": "seed"},
             )
         if not self.repository.recent_pilot_feedback(1):
@@ -350,13 +350,16 @@ class BerryDoctorApplication:
         self.broker.stop()
 
 
+BerryDoctorApplication = OpenSmartFarmDoctorApplication
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
     repository = SQLiteRepository()
-    app = BerryDoctorApplication(
+    app = OpenSmartFarmDoctorApplication(
         repository=repository,
         translator=Translator(),
         config_manager=ConfigManager(repository),

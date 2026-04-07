@@ -1,4 +1,4 @@
-"""BerryDoctor core package."""
+"""Open SmartFarm Doctor core package."""
 
 from __future__ import annotations
 

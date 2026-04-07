@@ -14,6 +14,7 @@ except Exception:  # pragma: no cover
     FastAPI = None
     Jinja2Templates = None
 
+from engine.app_identity import APP_NAME, APP_NAME_KO, APP_RUNTIME_TOKEN_PATH
 from engine.paths import app_root
 
 
@@ -22,8 +23,15 @@ def create_app(repository, coach, config, config_manager, backup_service, runtim
         return None
     from engine.web.routes import register_routes
 
-    app = FastAPI(title="Open SmartFarm Doctor Dashboard")
+    app = FastAPI(title=f"{APP_NAME} Dashboard")
     templates = Jinja2Templates(directory=str(Path(app_root() / "engine" / "web" / "templates")))
+    templates.env.globals.update(
+        {
+            "app_name": APP_NAME,
+            "app_name_ko": APP_NAME_KO,
+            "app_runtime_token_path": APP_RUNTIME_TOKEN_PATH,
+        }
+    )
     register_routes(app, templates, repository, coach, config, config_manager, backup_service, runtime_reload_callback)
     return app
 

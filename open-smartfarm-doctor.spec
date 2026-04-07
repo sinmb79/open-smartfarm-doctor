@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 root = Path(__file__).parent
+icon_path = root / "assets" / "open-smartfarm-doctor.ico"
 datas = [
     ("models", "models"),
     ("data", "data"),
@@ -49,4 +50,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=str(icon_path) if icon_path.exists() else None,
 )

@@ -22,7 +22,7 @@ class CommunitySource(SignalSource):
         emit_callback: Callable[[RawSignal], Any] | None = None,
         crop_profile: Any | None = None,
     ) -> None:
-        SignalSource.__init__(self, source_id="community", name="BerryDoctor 커뮤니티", language="ko", check_interval_hours=1)
+        SignalSource.__init__(self, source_id="community", name="Open SmartFarm Doctor 커뮤니티", language="ko", check_interval_hours=1)
         self.config = config
         self.repository = repository
         self.emit_callback = emit_callback
@@ -43,7 +43,7 @@ class CommunitySource(SignalSource):
         full_location = str(context.get("region_name") or getattr(self.config, "farm_location", "지역")).strip() or "지역"
         region_name = full_location.split("_")[0].split()[0] if full_location else "지역"
         sensor = context.get("sensor") or {}
-        crop_name = str(context.get("crop_name_ko") or getattr(self.crop_profile, "crop_name_ko", "딸기"))
+        crop_name = str(context.get("crop_name_ko") or getattr(self.crop_profile, "crop_name_ko", "작물"))
 
         signal = RawSignal(
             source_id=self.source_id,
@@ -51,7 +51,7 @@ class CommunitySource(SignalSource):
             title=f"{region_name}에서 {getattr(detection, 'label_ko', '병해')} 감지",
             summary=(
                 f"확신도 {getattr(detection, 'confidence', 0):.1f}%"
-                f", 환경 {sensor.get('temp_indoor', '-')}°C / {sensor.get('humidity', '-')}%"
+                f", 환경 {sensor.get('temp_indoor', '-')}C / {sensor.get('humidity', '-')}%"
             ),
             url=f"community://{region_name}/{datetime.now():%Y%m%d%H%M%S}",
             published_at=datetime.now(),

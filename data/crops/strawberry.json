@@ -93,9 +93,9 @@
     "healthy": "뚜렷한 병징은 적어 보여요."
   },
   "data_paths": {
-    "knowledge_graph": "knowledge_graph.json",
-    "calendar": "seolhyang_calendar.json",
-    "farmer_tips": "farmer_tips.json",
-    "pesticide_db": "pesticide_db.json"
+    "knowledge_graph": "crops/strawberry_knowledge.json",
+    "calendar": "crops/strawberry_calendar.json",
+    "farmer_tips": "crops/strawberry_tips.json",
+    "pesticide_db": "crops/strawberry_pesticide.json"
   }
 }

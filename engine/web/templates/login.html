@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>BerryDoctor Login</title>
+  <title>{{ app_name }} Login</title>
   <style>
     body { font-family: "Segoe UI", sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; background: linear-gradient(135deg, #f0f4ef, #e3ece7); color: #213128; }
     .card { width: min(420px, calc(100vw - 32px)); background: white; border-radius: 18px; padding: 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
@@ -15,7 +15,7 @@
 <body>
   <div class="card">
     <h1 style="margin-top: 0;">대시보드 로그인</h1>
-    <p class="muted">접근 토큰은 실행 폴더의 <code>runtime/dashboard-access.txt</code>에 저장됩니다.</p>
+    <p class="muted">접근 토큰은 실행 폴더의 <code>{{ app_runtime_token_path }}</code>에 저장됩니다.</p>
     {% if error %}
     <div class="error">{{ error }}</div>
     {% endif %}

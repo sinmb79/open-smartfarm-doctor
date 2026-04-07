@@ -17,6 +17,7 @@ class CropProfileTests(unittest.TestCase):
         self.assertEqual(profile.crop_name_ko, "딸기")
         self.assertEqual(profile.default_variety, "설향")
         self.assertTrue(resolve_data_path(profile, "knowledge_graph").exists())
+        self.assertIn("crops", str(resolve_data_path(profile, "knowledge_graph")))
         self.assertIn("botrytis", profile.diseases)
 
     def test_load_tomato_profile_has_different_diseases(self):
@@ -69,7 +70,7 @@ class CropProfileTests(unittest.TestCase):
         signal = RawSignal(
             source_id="test",
             source="테스트",
-            title="충남 토마토 습해 주의",
+            title="충남 토마토 병해 주의",
             summary="토마토 하우스 관리가 필요합니다.",
             url="https://example.com/tomato",
             published_at=datetime(2026, 4, 8, 9, 0, tzinfo=UTC),

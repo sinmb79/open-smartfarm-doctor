@@ -27,7 +27,7 @@ class KakaoWebhookServer:
     thread: Thread | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
-        app = Flask("berry-doctor-kakao")
+        app = Flask("open-smartfarm-doctor-kakao")
 
         @app.get("/health")
         def health():
@@ -58,7 +58,7 @@ class KakaoWebhookServer:
         secret = str(getattr(self.config, "webhook_signature_secret", "") or "").strip()
         if not secret:
             return True
-        for header_name in ("X-Kakao-Signature", "X-BerryDoctor-Signature", "X-Signature-256"):
+        for header_name in ("X-Kakao-Signature", "X-Open-SmartFarm-Signature", "X-BerryDoctor-Signature", "X-Signature-256"):
             provided = request.headers.get(header_name)
             if verify_hmac_signature(raw_body, secret, provided):
                 return True

@@ -12,11 +12,19 @@ from engine.signal.sources import SignalSource
 class MarketAlertSource(SignalSource):
     config: Any = None
     repository: Any = None
+    crop_profile: Any | None = None
 
-    def __init__(self, config: Any, repository: Any) -> None:
+    def __init__(self, config: Any, repository: Any, crop_profile: Any | None = None) -> None:
         SignalSource.__init__(self, source_id="market_alert", name="도매시장 가격 급변", language="ko", check_interval_hours=1)
         self.config = config
         self.repository = repository
+        self.crop_profile = crop_profile
+
+    def _crop_name(self) -> str:
+        return str(getattr(self.crop_profile, "crop_name_ko", "작물"))
+
+    def _market_item(self) -> str:
+        return str(getattr(self.crop_profile, "market_item_name", self._crop_name()))
 
     async def fetch(self) -> list[RawSignal]:
         history = self.repository.market_history(2)
@@ -33,15 +41,17 @@ class MarketAlertSource(SignalSource):
             return []
         direction = "급등" if delta_pct > 0 else "급락"
         now = datetime.now()
+        crop_name = self._crop_name()
+        market_item = self._market_item()
         return [
             RawSignal(
                 source_id=self.source_id,
                 source=self.name,
-                title=f"설향 시세 {direction}",
-                summary=f"직전 시세 대비 {delta_pct:+.1f}% 움직였어요. 출하 계획을 다시 보시면 좋아요.",
+                title=f"{market_item} 시세 {direction}",
+                summary=f"직전 시세 대비 {delta_pct:+.1f}% 움직였어요. 출하 계획을 다시 보는 편이 좋아요.",
                 url=f"https://at.agromarket.kr/mock/{now:%Y%m%d%H}",
                 published_at=now,
-                tags=["딸기", "설향", "시세", direction],
+                tags=[crop_name, market_item, "시세", direction],
                 payload={"market": {"delta_pct": round(delta_pct, 1), "price_per_kg": latest_price}},
             )
         ]

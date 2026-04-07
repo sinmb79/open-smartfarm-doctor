@@ -6,6 +6,8 @@ from threading import Thread
 from typing import Any
 from urllib.parse import quote
 
+from engine.app_identity import APP_SLUG
+
 try:
     import pystray
     from PIL import Image, ImageDraw
@@ -57,7 +59,7 @@ class TrayController:
             pystray.MenuItem(self.translator.t("tray.settings"), open_settings),
             pystray.MenuItem(self.translator.t("tray.quit"), lambda icon, item: icon.stop()),
         )
-        self.icon = pystray.Icon("berry-doctor", self._icon_image(self._color()), self.translator.t("app.name"), menu)
+        self.icon = pystray.Icon(APP_SLUG, self._icon_image(self._color()), self.translator.t("app.name"), menu)
         self.thread = Thread(target=self.icon.run, daemon=True)
         self.thread.start()
         return True

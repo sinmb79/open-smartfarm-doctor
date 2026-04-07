@@ -1,12 +1,15 @@
+import asyncio
 import tempfile
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
+from engine.crop_profile import load_crop_profile
 from engine.db.sqlite import SQLiteRepository
 from engine.signal.collector import SignalCollector
 from engine.signal.models import RawSignal
+from engine.signal.sources.market_alert import MarketAlertSource
 
 
 class _FakeSender:
@@ -49,7 +52,7 @@ class SignalTests(unittest.TestCase):
                             source_id="rda_pest",
                             source="농진청 병해충 예찰",
                             title="충남 딸기 잿빛곰팡이 특보",
-                            summary="습한 조건이 이어져 주의가 필요해요.",
+                            summary="비슷한 조건이 이어져 주의가 필요해요.",
                             url="https://example.com/1",
                             published_at=datetime(2026, 4, 7, 9, 0, tzinfo=UTC),
                             tags=["딸기", "충남", "특보"],
@@ -94,6 +97,22 @@ class SignalTests(unittest.TestCase):
 
             self.assertEqual(len(sender.messages), 2)
             self.assertEqual(repo.count_signal_deliveries_today(), 2)
+
+    def test_market_signal_source_uses_crop_profile_labels(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo = SQLiteRepository(Path(tmpdir) / "berry.db")
+            repo.initialize()
+            repo.record_market_snapshot("완숙토마토 상품", 3000, 0, 1, "mock", 3200)
+            repo.record_market_snapshot("완숙토마토 상품", 3600, 600, 1, "mock", 3800)
+            config = SimpleNamespace(farm_location="충남 서산", variety="완숙토마토")
+            tomato = load_crop_profile("tomato")
+            source = MarketAlertSource(config, repo, crop_profile=tomato)
+
+            items = asyncio.run(source.fetch())
+
+            self.assertEqual(len(items), 1)
+            self.assertIn("완숙토마토 상품", items[0].title)
+            self.assertIn("토마토", items[0].tags[0])
 
 
 if __name__ == "__main__":

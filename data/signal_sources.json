@@ -29,7 +29,7 @@
   "community": [
     {
       "id": "community",
-      "name": "BerryDoctor 커뮤니티",
+      "name": "Open SmartFarm Doctor 커뮤니티",
       "type": "local_detection",
       "interval_hours": 1,
       "enabled_after_users": 5

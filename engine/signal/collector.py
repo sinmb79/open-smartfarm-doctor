@@ -43,9 +43,9 @@ class SignalCollector:
         )
         if not self.sources:
             self.sources = [
-                RDAPestSource(self.config, self.repository),
-                KMASpecialSource(self.config, self.repository),
-                MarketAlertSource(self.config, self.repository),
+                RDAPestSource(self.config, self.repository, crop_profile=self.crop_profile),
+                KMASpecialSource(self.config, self.repository, crop_profile=self.crop_profile),
+                MarketAlertSource(self.config, self.repository, crop_profile=self.crop_profile),
             ]
 
     def set_fusion(self, fusion: Any) -> None:
@@ -55,6 +55,9 @@ class SignalCollector:
         self.crop_profile = crop_profile
         self.analyzer.set_crop_profile(crop_profile)
         self.community_source.crop_profile = crop_profile
+        for source in self.sources:
+            if hasattr(source, "crop_profile"):
+                source.crop_profile = crop_profile
 
     def _farm_profile(self) -> dict[str, Any]:
         return {
