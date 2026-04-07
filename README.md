@@ -1,61 +1,105 @@
 # open-smartfarm-doctor
 
-> 메타 설명: 다작물 스마트팜을 위한 공개 설계 문서와 Codex 핸드오프를 모은 저장소입니다.
+> 메타 설명: 다작물 스마트팜 운영을 위한 공개 프로그램 저장소입니다. 센서, 카카오톡, 자동화, 대시보드를 함께 담았습니다.
 >
-> 라벨: smartfarm, multicrop, greenhouse, agritech, automation, ai
+> 라벨: smartfarm, multicrop, greenhouse, agritech, mqtt, kakao, automation, ai
 
-왜 이 저장소가 있냐면, 많은 스마트팜 프로젝트가 처음에는 잘 돌아가다가도 특정 작물, 특정 장비, 특정 현장에 너무 강하게 묶이기 때문입니다.  
-`open-smartfarm-doctor`는 그런 병목을 줄이기 위해 만들었습니다. 딸기 중심으로 검증된 BerryDoctor의 흐름을 바탕으로, 작물에 덜 종속되고 더 확장 가능한 스마트팜 설계 문서와 실행 지시서를 공개하는 저장소입니다.
+왜 이 저장소를 따로 만들었냐면, 좋은 현장 도구는 특정 작물 하나에만 갇히는 순간 확장성을 잃기 때문입니다.  
+`open-smartfarm-doctor`는 기존 `berry-doctor`를 보존한 채, 다작물과 범용 스마트팜 운영으로 넓혀 가기 위한 별도 공개 프로그램 저장소입니다. 문서만 모아 둔 아카이브가 아니라, 실제로 실행하고 확장할 수 있는 코드베이스를 담고 있습니다.
 
-비개발자 기준으로 30초만에 설명하면 이렇습니다.  
-이 저장소는 “센서 데이터, 외부 농업 정보, 위성 참고 정보, 자동화 규칙, 현장 운영 문서”를 한데 묶어 다작물 스마트팜으로 확장하기 위한 공개 청사진입니다. 코드를 바로 실행하는 제품 저장소라기보다, 제품과 플랫폼을 더 넓게 만들기 위한 설계의 출발점에 가깝습니다.
+30초만에 설명하면 이렇습니다.  
+이 프로그램은 센서 데이터, 카카오톡 명령, 병해 진단, 자동 제어 제안, 위성 참고 정보, 외부 농업 시그널, 대시보드 운영 화면을 하나의 흐름으로 묶습니다. 농부는 카카오톡 한 채널만 보면 되고, 내부에서는 더 많은 판단이 조용히 작동합니다.
 
-## 🌱 이 저장소에 들어 있는 것
+## 🌱 이 저장소의 정체성
 
-- [BerryDoctor_MultiCrop_Codex_Order.md](./docs/BerryDoctor_MultiCrop_Codex_Order.md)
-  딸기 전용 구조를 다작물 구조로 바꾸기 위한 리팩터링 지시서입니다.
-- [BerryDoctor_v3_TripleIntelligence_Codex_Spec.md](./docs/BerryDoctor_v3_TripleIntelligence_Codex_Spec.md)
-  센서, 외부 시그널, 위성 참고 정보를 함께 쓰는 3중 지능 확장 문서입니다.
+- `berry-doctor`를 그대로 보존하면서 별도로 공개하는 프로그램 저장소입니다.
+- 딸기에서 시작했지만, 토마토 같은 다른 작물로 확장할 수 있는 구조를 목표로 합니다.
+- 인터넷 기반 기능이 있어도, 로컬 센서와 기본 자동화는 가능한 한 독립적으로 유지합니다.
+- 과장된 “완전 자동”보다, 현장을 덜 속이는 판단 구조를 우선합니다.
 
-## 🧭 이 저장소가 다루는 질문
+## ✨ 핵심 기능
 
-- 어떻게 하면 딸기 전용 스마트팜을 토마토, 고추, 오이 같은 다작물 구조로 확장할 수 있을까
-- 센서만 보는 시스템을 넘어서, 외부 맥락과 장기 추세를 함께 판단하는 구조를 어떻게 만들까
-- 농부가 복잡한 기술 용어를 몰라도 바로 이해할 수 있는 운영 언어를 어떻게 만들까
-- 인터넷이 끊겨도 핵심 생존 기능은 유지되는 구조를 어떻게 지킬까
+- 카카오톡으로 상태 확인, 사진 진단, 작업 기록, 제어 명령 처리
+- MQTT 기반 센서 수집과 환경 제어 제안
+- 병해 진단, 시세 추정, 일일·월간 리포트
+- 외부 농업 시그널 수집과 3축 교차 검증
+- 위성 참고 정보와 시즌 타임라인 기록
+- 대시보드 기반 운영, 백업, 이력 조회
+- 멀티크롭 프로필 구조
+  현재 기본 작물은 딸기이며, 토마토 시드 프로필까지 포함되어 있습니다.
 
-## 🧩 누가 보면 좋은가
+## 🧭 지금 바로 이해해야 할 점
 
-- 다작물 스마트팜 플랫폼을 설계하려는 개발자
-- 농업 AI, 자동화, 대시보드, MQTT, 현장 운영 문서를 함께 다루는 팀
-- BerryDoctor 계열 프로젝트를 더 범용적인 구조로 확장하려는 메이커
-- “제품 코드”보다 먼저 “판단 구조”를 이해하고 싶은 기획자와 운영자
+- 이 저장소는 문서 저장소가 아니라 실제 프로그램 코드 저장소입니다.
+- 다만 일부 운영 자산은 현장 환경에 따라 별도로 채워야 합니다.
+  예: 실 ONNX 모델, 카카오 채널 토큰, Mosquitto 바이너리
+- 저장소 안의 일부 설계 문서와 명칭에는 여전히 `BerryDoctor`가 남아 있습니다.
+  이것은 원본 계보를 보존하기 위한 것이고, 공개 배포 레포의 방향은 `open-smartfarm-doctor`입니다.
 
-## 📚 추천 읽기 순서
+## 📦 구성
 
-1. 먼저 [BerryDoctor_MultiCrop_Codex_Order.md](./docs/BerryDoctor_MultiCrop_Codex_Order.md)를 읽어 다작물 구조 전환의 뼈대를 잡습니다.
-2. 그다음 [BerryDoctor_v3_TripleIntelligence_Codex_Spec.md](./docs/BerryDoctor_v3_TripleIntelligence_Codex_Spec.md)를 읽어 센서 밖의 세계를 어떻게 붙일지 봅니다.
-3. 마지막으로 자신의 현장에 맞게 작물 프로필, 알림 정책, 자동화 경계를 다시 정의하면 됩니다.
+- [main.py](./main.py)
+  프로그램 진입점
+- [engine](./engine)
+  AI, 제어, 스케줄러, DB, 웹, 시그널, 위성, 보안 모듈
+- [data](./data)
+  작물 프로필, 규칙, 팁, 시그널 설정 데이터
+- [firmware](./firmware)
+  ESP32 기반 센서·보안 펌웨어
+- [tests](./tests)
+  회귀 테스트와 기능 검증
+- [docs](./docs)
+  아키텍처, 설치 가이드, 핸드오프 문서
 
-## 🔧 로컬에서 바로 보는 방법
+## 🚀 빠른 시작
 
-문서 저장소라서 특별한 빌드 과정은 없습니다. 먼저 내려받고, `docs` 폴더의 문서를 바로 열면 됩니다.
+먼저 저장소를 내려받고, Python 가상환경을 만든 뒤 의존성을 설치합니다.
 
 ```bash
 git clone https://github.com/sinmb79/open-smartfarm-doctor.git
 cd open-smartfarm-doctor
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
+
+그다음 프로그램을 바로 실행할 수 있습니다.
+
+```bash
+python main.py
+```
+
+첫 실행 시 설정 마법사에서 농장 위치, 동 수, 작물, 품종, WiFi 정보를 입력하면 됩니다.
+
+## 🛠️ 빌드
+
+Windows 단일 실행 파일을 만들려면 아래처럼 실행합니다.
+
+```bash
+python setup.py
+```
+
+이 저장소에서는 PyInstaller 출력 이름을 `open-smartfarm-doctor`로 맞췄습니다.  
+Mosquitto 바이너리가 없으면 해당 번들은 제외하고 빌드되도록 처리했습니다.
+
+## 📚 함께 읽으면 좋은 문서
+
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+- [docs/INSTALL_DEV.md](./docs/INSTALL_DEV.md)
+- [docs/INSTALL_FARMER.md](./docs/INSTALL_FARMER.md)
+- [docs/BerryDoctor_MultiCrop_Codex_Order.md](./docs/BerryDoctor_MultiCrop_Codex_Order.md)
+- [docs/BerryDoctor_v3_TripleIntelligence_Codex_Spec.md](./docs/BerryDoctor_v3_TripleIntelligence_Codex_Spec.md)
 
 ## 🤝 공개 원칙
 
-- 과대 약속보다 현장 제약을 먼저 적습니다.
-- 자동화보다 사람이 이해할 수 있는 판단을 우선합니다.
-- 특정 작물에 최적화된 성공을 범용 플랫폼으로 착각하지 않습니다.
-- “더 똑똑한 시스템”보다 “덜 속이는 시스템”을 지향합니다.
+- 현장 제약을 숨기지 않습니다.
+- 사람이 이해할 수 없는 자동화는 좋은 자동화로 보지 않습니다.
+- 작물 하나에서 통하던 감각을 범용 진실처럼 포장하지 않습니다.
+- 제품보다 먼저 판단의 경계를 설계합니다.
 
 ## 🧠 만든 사람
 
 22B Labs · The 4th Path  
 GitHub: [sinmb79](https://github.com/sinmb79)
 
-좋은 스마트팜은 센서를 더 붙이는 시스템이 아니라, 현장을 더 정직하게 해석하는 시스템입니다.
+좋은 스마트팜은 센서를 더 다는 시스템이 아니라, 현장을 덜 오해하는 시스템입니다.
